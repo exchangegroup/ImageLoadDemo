@@ -38,8 +38,8 @@ class ViewController: UIViewController {
       print("\(message) \(url)")
     }
     
-    Moa.settings.requestTimeoutSeconds = 10
-    Moa.settings.maximumSimultaneousDownloads = 3
+//    Moa.settings.requestTimeoutSeconds = 10
+//    Moa.settings.maximumSimultaneousDownloads = 3
     
     Moa.logger = { logType, url, status, error in
       switch logType {
@@ -68,11 +68,14 @@ class ViewController: UIViewController {
     let url = ImageLoader.urls[currentImageIndex]
     currentImageIndex += 1
     
-    imageLoader.download(url) { image in
-      dispatch_async(dispatch_get_main_queue()) { [weak self] in
-        self?.imageView.image = image
-      }
-    }
+    imageView.image = nil
+    imageView.moa.url = url
+    
+//    imageLoader.download(url) { image in
+//      dispatch_async(dispatch_get_main_queue()) { [weak self] in
+//        self?.imageView.image = image
+//      }
+//    }
   }
 }
 

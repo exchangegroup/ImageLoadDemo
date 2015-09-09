@@ -74,30 +74,30 @@ struct MoaHttp {
     onSuccess: (NSData?, NSHTTPURLResponse)->(),
     onError: (NSError?, NSHTTPURLResponse?)->()) -> NSURLSessionDataTask? {
       
-      if let nsUrl = NSURL(string: url) {
-        return createDataTask(nsUrl, onSuccess: onSuccess, onError: onError)
-      }
-      
-      // Error converting string to NSURL
-      onError(MoaError.InvalidUrlString.nsError, nil)
-      return nil
+    if let nsUrl = NSURL(string: url) {
+      return createDataTask(nsUrl, onSuccess: onSuccess, onError: onError)
+    }
+    
+    // Error converting string to NSURL
+    onError(MoaError.InvalidUrlString.nsError, nil)
+    return nil
   }
   
   private static func createDataTask(nsUrl: NSURL,
     onSuccess: (NSData?, NSHTTPURLResponse)->(),
     onError: (NSError?, NSHTTPURLResponse?)->()) -> NSURLSessionDataTask? {
       
-      return MoaHttpSession.session?.dataTaskWithURL(nsUrl) { (data, response, error) in
-        if let httpResponse = response as? NSHTTPURLResponse {
-          if error == nil {
-            onSuccess(data, httpResponse)
-          } else {
-            onError(error, httpResponse)
-          }
+    return MoaHttpSession.session?.dataTaskWithURL(nsUrl) { (data, response, error) in
+      if let httpResponse = response as? NSHTTPURLResponse {
+        if error == nil {
+          onSuccess(data, httpResponse)
         } else {
-          onError(error, nil)
+          onError(error, httpResponse)
         }
+      } else {
+        onError(error, nil)
       }
+    }
   }
 }
 
@@ -269,10 +269,10 @@ struct MoaHttpSession {
   private static func createNewSession() -> NSURLSession {
     let configuration = NSURLSessionConfiguration.defaultSessionConfiguration()
     
-    configuration.timeoutIntervalForRequest = Moa.settings.requestTimeoutSeconds
-    configuration.timeoutIntervalForResource = Moa.settings.requestTimeoutSeconds
-    configuration.HTTPMaximumConnectionsPerHost = Moa.settings.maximumSimultaneousDownloads
-    configuration.requestCachePolicy = Moa.settings.cache.requestCachePolicy
+//    configuration.timeoutIntervalForRequest = Moa.settings.requestTimeoutSeconds
+//    configuration.timeoutIntervalForResource = Moa.settings.requestTimeoutSeconds
+//    configuration.HTTPMaximumConnectionsPerHost = Moa.settings.maximumSimultaneousDownloads
+//    configuration.requestCachePolicy = Moa.settings.cache.requestCachePolicy
     
     #if os(iOS)
       // Cache path is a directory name in iOS
@@ -282,12 +282,12 @@ struct MoaHttpSession {
       let cachePath = osxCachePath(Moa.settings.cache.diskPath)
     #endif
     
-    let cache = NSURLCache(
-      memoryCapacity: Moa.settings.cache.memoryCapacityBytes,
-      diskCapacity: Moa.settings.cache.diskCapacityBytes,
-      diskPath: cachePath)
-    
-    configuration.URLCache = cache
+//    let cache = NSURLCache(
+//      memoryCapacity: Moa.settings.cache.memoryCapacityBytes,
+//      diskCapacity: Moa.settings.cache.diskCapacityBytes,
+//      diskPath: cachePath)
+//    
+//    configuration.URLCache = cache
     
     return NSURLSession(configuration: configuration)
   }

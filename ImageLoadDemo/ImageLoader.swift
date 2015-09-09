@@ -27,12 +27,7 @@ class ImageLoader {
   }()
   
   func download(url: String, onSuccess: (UIImage)->()) {
-    imageView.moa.url = url
     
-    imageView.moa.onError = { [weak self] error, response in
-      
-      self?.logger?("ERROR \(error?.localizedDescription)", url)
-    }
     
 //    guard let nsurl = NSURL(string: url) else { return }
 //    
@@ -57,19 +52,21 @@ class ImageLoader {
   }
   
   func startBulkLoad() {
-    timer = AutoCancellingTimer(interval: 0.03, repeats: true) { [weak self] in
+    timer = AutoCancellingTimer(interval: 0.01, repeats: true) { [weak self] in
       self?.onTimerFired()
     }
   }
   
   func onTimerFired() {
-    if currentUrlIndex >= (600) {
+    if currentUrlIndex >= (500) {
       timer?.cancel()
     }
     
     let url = ImageLoader.urls[currentUrlIndex]
     currentUrlIndex += 1
-    download(url) { _ in }
+//    download(url) { _ in }
+    imageView.moa.url = url
+
   }
   
   static let urls = ["https://office.bikeexchange.com.au/dbimages/bike/fn_large/240/102742240/popup/Defy_Advanced_SL_0_Comp-800px.jpg",
