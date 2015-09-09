@@ -1,25 +1,33 @@
-//
-//  ViewController.swift
-//  ImageLoadDemo
-//
-//  Created by Evgenii on 9/09/2015.
-//  Copyright © 2015 Marketplacer. All rights reserved.
-//
-
 import UIKit
 
 class ViewController: UIViewController {
+  var imageLoader = ImageLoader()
+  var currentImageIndex = 0
 
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
+  @IBOutlet weak var imageView: UIImageView!
+  
+  override func viewDidLoad() {
+    super.viewDidLoad()
+    
+    imageLoader.logger = { message, url in
+      print("\(message) \(url)")
     }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+  }
+  
+  @IBAction func startBulkImageLoad(sender: AnyObject) {
+    imageLoader.startBulkLoad()
+  }
+  
+  @IBAction func loadSingleImage(sender: AnyObject) {
+    if currentImageIndex >= ImageLoader.urls.count - 1 { currentImageIndex = 0 }
+    let url = ImageLoader.urls[currentImageIndex]
+    currentImageIndex += 1
+    
+    imageLoader.download(url) { image in
+      dispatch_async(dispatch_get_main_queue()) { [weak self] in
+        self?.imageView.image = image
+      }
     }
-
-
+  }
 }
 
