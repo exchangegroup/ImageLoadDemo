@@ -13,13 +13,19 @@ class ViewController: UIViewController {
     imageLoader.logger = { message, url in
       print("\(message) \(url)")
     }
+    
+    loadSingleImage()
   }
   
   @IBAction func startBulkImageLoad(sender: AnyObject) {
     imageLoader.startBulkLoad()
   }
   
-  @IBAction func loadSingleImage(sender: AnyObject) {
+  @IBAction func didTapLoadSingleImage(sender: AnyObject) {
+    loadSingleImage()
+  }
+  
+  private func loadSingleImage() {
     if currentImageIndex >= ImageLoader.urls.count - 1 { currentImageIndex = 0 }
     let url = ImageLoader.urls[currentImageIndex]
     currentImageIndex += 1

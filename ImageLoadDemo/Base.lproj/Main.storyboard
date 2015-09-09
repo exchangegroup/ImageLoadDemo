@@ -35,7 +35,7 @@
                                 <rect key="frame" x="238" y="353" width="124" height="30"/>
                                 <state key="normal" title="Load single image"/>
                                 <connections>
-                                    <action selector="loadSingleImage:" destination="BYZ-38-t0r" eventType="touchUpInside" id="6SN-Xb-Jtd"/>
+                                    <action selector="didTapLoadSingleImage:" destination="BYZ-38-t0r" eventType="touchUpInside" id="huZ-sn-1hz"/>
                                 </connections>
                             </button>
                         </subviews>

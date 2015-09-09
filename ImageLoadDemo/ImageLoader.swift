@@ -10,14 +10,13 @@ class ImageLoader {
   
   lazy var session: NSURLSession = {
     var configuration = NSURLSessionConfiguration.defaultSessionConfiguration()
+    configuration.requestCachePolicy = NSURLRequestCachePolicy.ReloadIgnoringCacheData
     configuration.timeoutIntervalForRequest = 3
 
     return NSURLSession(configuration: configuration)
   }()
   
   func download(url: String, onSuccess: (UIImage)->()) {
-    
-    
     guard let nsurl = NSURL(string: url) else { return }
     
     logger?("GET", url)
@@ -29,10 +28,11 @@ class ImageLoader {
       if let error = error {
         self?.logger?("ERROR \(error.localizedDescription)", url)
       } else {
-        self?.logger?("SUCCESS", url)
-        
         if let data = data, image = UIImage(data: data) {
+          self?.logger?("SUCCESS", url)
           onSuccess(image)
+        } else {
+          self?.logger?("ERROR reading data", url)
         }
       }
     }
@@ -41,21 +41,19 @@ class ImageLoader {
   }
   
   func startBulkLoad() {
-    timer = AutoCancellingTimer(interval: 0.01, repeats: true) { [weak self] in
+    timer = AutoCancellingTimer(interval: 0.005, repeats: true) { [weak self] in
       self?.onTimerFired()
     }
   }
   
   func onTimerFired() {
-    if currentUrlIndex >= (500) {
+    if currentUrlIndex >= (400) {
       timer?.cancel()
     }
     
     let url = ImageLoader.urls[currentUrlIndex]
     currentUrlIndex += 1
     download(url) { _ in }
-//    imageView.moa.url = url
-
   }
   
   static let urls = ["https://office.bikeexchange.com.au/dbimages/bike/fn_large/240/102742240/popup/Defy_Advanced_SL_0_Comp-800px.jpg",
