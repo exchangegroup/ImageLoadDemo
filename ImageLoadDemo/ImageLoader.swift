@@ -1,4 +1,3 @@
-
 import UIKit
 
 class ImageLoader {
@@ -28,27 +27,33 @@ class ImageLoader {
   }()
   
   func download(url: String, onSuccess: (UIImage)->()) {
+    imageView.moa.url = url
     
-    guard let nsurl = NSURL(string: url) else { return }
-    
-    logger?("GET", url)
-    
-    dataTask?.cancel()
-    dataTask = nil
-    
-    dataTask = session.dataTaskWithURL(nsurl) { [weak self] (data, response, error) in
-      if let error = error {
-        self?.logger?("ERROR \(error.localizedDescription)", url)
-      } else {
-        self?.logger?("SUCCESS", url)
-        
-        if let data = data, image = UIImage(data: data) {
-          onSuccess(image)
-        }
-      }
+    imageView.moa.onError = { [weak self] error, response in
+      
+      self?.logger?("ERROR \(error?.localizedDescription)", url)
     }
     
-    dataTask?.resume()
+//    guard let nsurl = NSURL(string: url) else { return }
+//    
+//    logger?("GET", url)
+//    
+//    dataTask?.cancel()
+//    dataTask = nil
+//    
+//    dataTask = session.dataTaskWithURL(nsurl) { [weak self] (data, response, error) in
+//      if let error = error {
+//        self?.logger?("ERROR \(error.localizedDescription)", url)
+//      } else {
+//        self?.logger?("SUCCESS", url)
+//        
+//        if let data = data, image = UIImage(data: data) {
+//          onSuccess(image)
+//        }
+//      }
+//    }
+//    
+//    dataTask?.resume()
   }
   
   func startBulkLoad() {
