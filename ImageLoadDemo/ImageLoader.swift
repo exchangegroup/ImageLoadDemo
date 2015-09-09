@@ -10,18 +10,7 @@ class ImageLoader {
   
   lazy var session: NSURLSession = {
     var configuration = NSURLSessionConfiguration.defaultSessionConfiguration()
-    configuration.timeoutIntervalForRequest = 10
-    configuration.timeoutIntervalForResource = 10
-    configuration.HTTPMaximumConnectionsPerHost = 3
-
-    configuration.requestCachePolicy = .UseProtocolCachePolicy
-    
-    let cache = NSURLCache(
-      memoryCapacity: 20 * 1024 * 1024,
-      diskCapacity: 100 * 1024 * 1024,
-      diskPath: "imageLoaderCache")
-    
-    configuration.URLCache = cache
+    configuration.timeoutIntervalForRequest = 3
 
     return NSURLSession(configuration: configuration)
   }()
@@ -29,26 +18,26 @@ class ImageLoader {
   func download(url: String, onSuccess: (UIImage)->()) {
     
     
-//    guard let nsurl = NSURL(string: url) else { return }
-//    
-//    logger?("GET", url)
-//    
-//    dataTask?.cancel()
-//    dataTask = nil
-//    
-//    dataTask = session.dataTaskWithURL(nsurl) { [weak self] (data, response, error) in
-//      if let error = error {
-//        self?.logger?("ERROR \(error.localizedDescription)", url)
-//      } else {
-//        self?.logger?("SUCCESS", url)
-//        
-//        if let data = data, image = UIImage(data: data) {
-//          onSuccess(image)
-//        }
-//      }
-//    }
-//    
-//    dataTask?.resume()
+    guard let nsurl = NSURL(string: url) else { return }
+    
+    logger?("GET", url)
+    
+    dataTask?.cancel()
+    dataTask = nil
+    
+    dataTask = session.dataTaskWithURL(nsurl) { [weak self] (data, response, error) in
+      if let error = error {
+        self?.logger?("ERROR \(error.localizedDescription)", url)
+      } else {
+        self?.logger?("SUCCESS", url)
+        
+        if let data = data, image = UIImage(data: data) {
+          onSuccess(image)
+        }
+      }
+    }
+    
+    dataTask?.resume()
   }
   
   func startBulkLoad() {
@@ -64,8 +53,8 @@ class ImageLoader {
     
     let url = ImageLoader.urls[currentUrlIndex]
     currentUrlIndex += 1
-//    download(url) { _ in }
-    imageView.moa.url = url
+    download(url) { _ in }
+//    imageView.moa.url = url
 
   }
   
