@@ -1,7 +1,9 @@
 import UIKit
 
 class ImageLoader {
-  static var domain = "https:/yaushop.com"
+//  static var domain = "https://yaushop.com"
+  static var domain = "https://office.bikeexchange.com.au"
+
   
   var timer: AutoCancellingTimer?
   let imageView = UIImageView()
@@ -43,7 +45,7 @@ class ImageLoader {
   }
   
   func startBulkLoad() {
-    timer = AutoCancellingTimer(interval: 0.01, repeats: true) { [weak self] in
+    timer = AutoCancellingTimer(interval: 0.005, repeats: true) { [weak self] in
       self?.onTimerFired()
     }
   }
@@ -60,7 +62,7 @@ class ImageLoader {
   
   func getUrl(index: Int) -> String {
     let url = ImageLoader.urls[index]
-    return "\(ImageLoader.domain)/\(url)"
+    return "\(ImageLoader.domain)\(url)"
   }
   
   static let urls = ["/dbimages/bike/fn_large/240/102742240/popup/Defy_Advanced_SL_0_Comp-800px.jpg",
