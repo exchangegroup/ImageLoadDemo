@@ -43,7 +43,7 @@ class ImageLoader {
   }
   
   func startBulkLoad() {
-    timer = AutoCancellingTimer(interval: 0.02, repeats: true) { [weak self] in
+    timer = AutoCancellingTimer(interval: 0.03, repeats: true) { [weak self] in
       self?.onTimerFired()
     }
   }
