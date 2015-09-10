@@ -20,7 +20,7 @@ class ImageLoader {
     get {
       sessionRequestCounter += 1
       
-      if sessionRequestCounter > 1000 {
+      if sessionRequestCounter > 100 {
         cachedSession = nil
         sessionRequestCounter = 0
       }
