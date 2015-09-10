@@ -1,9 +1,8 @@
 import UIKit
 
 class ImageLoader {
-//  static var domain = "https://yaushop.com"
-  static var domain = "https://office.bikeexchange.com.au"
-
+  static var domain = "https://yaushop.com"
+//  static var domain = "https://office.bikeexchange.com.au"
   
   var timer: AutoCancellingTimer?
   let imageView = UIImageView()
