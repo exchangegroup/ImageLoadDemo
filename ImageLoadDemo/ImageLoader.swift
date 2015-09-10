@@ -1,7 +1,9 @@
 import UIKit
 
 class ImageLoader {
-  static var domain = "https://yaushop.com"
+//  static var domain = "https://yaushop.com"
+  static var domain = "https://www.bikeexchange.com.au"
+
   
   var timer: AutoCancellingTimer?
   let imageView = UIImageView()
@@ -10,13 +12,30 @@ class ImageLoader {
   
   var logger: ((String, String)->())?
   
-  lazy var session: NSURLSession = {
-    var configuration = NSURLSessionConfiguration.defaultSessionConfiguration()
-    configuration.requestCachePolicy = NSURLRequestCachePolicy.ReloadIgnoringCacheData
-    configuration.timeoutIntervalForRequest = 3
-
-    return NSURLSession(configuration: configuration)
-  }()
+  var cachedSession: NSURLSession?
+  
+  var sessionRequestCounter = 0
+  
+  var session: NSURLSession {
+    get {
+      sessionRequestCounter += 1
+      
+      if sessionRequestCounter > 1000 {
+        cachedSession = nil
+        sessionRequestCounter = 0
+      }
+      
+      if let cachedSession = cachedSession { return cachedSession }
+      
+      var configuration = NSURLSessionConfiguration.defaultSessionConfiguration()
+      configuration.requestCachePolicy = NSURLRequestCachePolicy.ReloadIgnoringCacheData
+      configuration.timeoutIntervalForRequest = 3
+      let newSession = NSURLSession(configuration: configuration)
+      
+      cachedSession = newSession
+      return newSession
+    }
+  }
   
   func download(url: String, onSuccess: (UIImage)->()) {
     guard let nsurl = NSURL(string: url) else { return }
