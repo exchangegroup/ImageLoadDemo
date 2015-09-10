@@ -27,7 +27,7 @@ class ViewController: UIViewController {
   
   private func loadSingleImage() {
     if currentImageIndex >= ImageLoader.urls.count - 1 { currentImageIndex = 0 }
-    let url = ImageLoader.urls[currentImageIndex]
+    let url = imageLoader.getUrl(currentImageIndex)
     currentImageIndex += 1
     
     imageView.image = nil
